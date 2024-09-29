@@ -36,18 +36,17 @@
         let countdownInterval = null;
         let gameActive = false;  // Flag to track if the game is active
 
-        // Function to fetch today's station from stations.json
 // Function to fetch today's station from stations.json
 async function fetchDailyStation() {
     try {
         const today = new Date();
-        const formattedDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;  // Format date as YYYY-M-D
-        console.log("Today's date:", formattedDate);  // Print the date for debugging
+        const utcDate = today.toISOString().split('T')[0];  // Get current date in UTC format (YYYY-MM-DD)
+        console.log("Today's date in UTC:", utcDate);  // Print the date for debugging
         const response = await fetch('stations.json');
         const data = await response.json();
         
         // Filter stations to find today's station
-        const todaysStations = data.filter(station => station.date === formattedDate);
+        const todaysStations = data.filter(station => station.date === utcDate);
         console.log("Today's stations:", todaysStations);  // Print filtered stations for debugging
         if (todaysStations.length > 0) {
             currentStation = todaysStations[0];  // Take the first station for today
@@ -77,7 +76,7 @@ async function fetchDailyStation() {
             document.getElementById('status-message').textContent = "";
             document.getElementById('country-selection').classList.remove('hidden');
 
-            startStation(currentStation, 300);  // 5 minutes playtime
+            startStation(currentStation, 3600);  // 5 minutes playtime
 
             // Generate country dropdown options
             generateCountryDropdown();
