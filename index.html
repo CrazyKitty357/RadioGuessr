@@ -5,19 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RadioGuessr</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f0f0; }
-        .game-container { text-align: center; padding: 50px; }
-        .guess-btn { padding: 10px 20px; margin: 5px; }
-        .hidden { display: none; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            overflow: hidden; /* Prevent scroll bars from appearing */
+        }
+        .game-container { 
+            text-align: center; 
+            padding: 50px; 
+            position: relative; 
+            z-index: 1; /* Ensure the text is above the video */
+        }
+        .guess-btn { 
+            padding: 10px 20px; 
+            margin: 5px; 
+        }
+        .hidden { 
+            display: none; 
+        }
+        /* Styles for the background video */
+        #bgVideo { 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            z-index: 0; /* Ensure the video is behind other content */
+            transform: translate(-50%, -50%); /* Center the video */
+            /* background: url('https://cdn.pixabay.com/photo/2020/03/30/22/33/wallpaper-4992130_1280.jpg') no-repeat; */
+            background-size: auto; /* Cover the entire screen */
+        }
     </style>
+    <link rel="stylesheet" href="styles.css">
+    
 </head>
-<body>
+<body onload="showDate();">
     <div class="game-container">
         <h1>RadioGuessr</h1>
+        <h3>Guess where the radio station is located.</h3>
+        <p id="dateText">2024-00-00</p>
         <audio id="radio-player" controls></audio>
         <br>
         <button id="play-button" onclick="startDailyMode()">Play Game</button>
-        <p id="status-message"></p>
         
         <!-- Country Dropdown -->
         <div id="country-selection" class="hidden">
@@ -28,7 +58,12 @@
         </div>
 
         <p id="guesses-left-container" class="hidden">Guesses left: <span id="guesses-left">5</span></p>
-    </div>
+        <p id="status-message"></p>
+        </div>
+    <!-- <video autoplay muted loop id="bgVideo">
+        <source src="https://videos.pexels.com/video-files/5983042/5983042-uhd_2560_1440_24fps.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video> -->
 
     <script>
         let currentStation = null;
@@ -36,30 +71,36 @@
         let countdownInterval = null;
         let gameActive = false;  // Flag to track if the game is active
 
-// Function to fetch today's station from stations.json
-async function fetchDailyStation() {
-    try {
-        const today = new Date();
-        const utcDate = today.toISOString().split('T')[0];  // Get current date in UTC format (YYYY-MM-DD)
-        console.log("Today's date in UTC:", utcDate);  // Print the date for debugging
-        const response = await fetch('stations.json');
-        const data = await response.json();
-        
-        // Filter stations to find today's station
-        const todaysStations = data.filter(station => station.date === utcDate);
-        console.log("Today's stations:", todaysStations);  // Print filtered stations for debugging
-        if (todaysStations.length > 0) {
-            currentStation = todaysStations[0];  // Take the first station for today
-        } else {
-            console.error("No daily station found for today");
-            document.getElementById('status-message').textContent = "No daily station available today.";
+        function showDate(){
+            const today = new Date();
+            const utcDate = today.toISOString().split('T')[0];
+            document.getElementById('dateText').textContent = utcDate;
+            console.log("tried to show date on page")
         }
-    } catch (error) {
-        console.error("Error fetching daily station:", error);
-        document.getElementById('status-message').textContent = "Error loading the daily station.";
-    }
-}
 
+        // Function to fetch today's station from stations.json
+        async function fetchDailyStation() {
+            try {
+                const today = new Date();
+                const utcDate = today.toISOString().split('T')[0];  // Get current date in UTC format (YYYY-MM-DD)
+                console.log("Today's date in UTC:", utcDate);  // Print the date for debugging
+                const response = await fetch('stations.json');
+                const data = await response.json();
+                
+                // Filter stations to find today's station
+                const todaysStations = data.filter(station => station.date === utcDate);
+                console.log("Today's stations:", todaysStations);  // Print filtered stations for debugging
+                if (todaysStations.length > 0) {
+                    currentStation = todaysStations[0];  // Take the first station for today
+                } else {
+                    console.error("No daily station found for today");
+                    document.getElementById('status-message').textContent = "No daily station available today.";
+                }
+            } catch (error) {
+                console.error("Error fetching daily station:", error);
+                document.getElementById('status-message').textContent = "Error loading the daily station.";
+            }
+        }
 
         // Function to start the game in Daily Mode
         async function startDailyMode() {
@@ -127,7 +168,7 @@ async function fetchDailyStation() {
         function submitGuess() {
             const selectedCountry = document.getElementById('country-dropdown').value;
             if (selectedCountry === currentStation.country) {
-                document.getElementById('status-message').textContent = "Correct! You guessed the right country.";
+                document.getElementById('status-message').textContent = "You guessed the correct country!";
                 endGame();  // Call endGame function if the guess is correct
             } else {
                 guessesLeft--;

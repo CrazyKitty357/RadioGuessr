@@ -1,4 +1,10 @@
 [
   { "date": "2024-09-29", "country": "Japan", "stationURL": "https://radio.garden/api/ara/content/listen/agGPOrdP/channel.mp3?r=1&1727567477094" },
-  { "date": "2024-09-30", "country": "Germany", "stationURL": "https://radio.garden/api/ara/content/listen/xsE94Tzl/channel.mp3?r=1&1727575913246" }
+  { "date": "2024-09-30", "country": "Germany", "stationURL": "https://radio.garden/api/ara/content/listen/xsE94Tzl/channel.mp3?r=1&1727575913246" },
+  { "date": "2024-10-1", "country": "Ireland", "stationURL": "https://radio.garden/api/ara/content/listen/_CnCfxNt/channel.mp3?r=1&1727584324031" },
+  { "date": "2024-10-2", "country": "Chile", "stationURL": "https://radio.garden/api/ara/content/listen/g6FEw9TZ/channel.mp3?r=1&1727584718414" },
+  { "date": "2024-10-3", "country": "Madagascar", "stationURL": "https://radio.garden/api/ara/content/listen/ytMNnH8H/channel.mp3?r=1&1727584851024"},
+  { "date": "2024-10-4", "country": "Spain", "stationURL": "https://radio.garden/api/ara/content/listen/mwnQSDMY/channel.mp3?r=1&1727584992356"},
+  { "date": "2024-10-5", "country": "United States", "stationURL": "https://radio.garden/api/ara/content/listen/Ilmc2uaC/channel.mp3?r=1&1727587980624"},
+  { "date":"2024-10-6", "country": "Brazil", "stationURL": "https://radio.garden/api/ara/content/listen/tF2-otqP/channel.mp3?r=1&1727589409673"}
 ]
