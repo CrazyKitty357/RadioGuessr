@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadioGuessr</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f0f0; }
+        .game-container { text-align: center; padding: 50px; }
+        .guess-btn { padding: 10px 20px; margin: 5px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>RadioGuessr</h1>
+        <audio id="radio-player" controls></audio>
+        <br>
+        <button id="play-button" onclick="startDailyMode()">Play Game</button>
+        <p id="status-message"></p>
+        
+        <!-- Country Dropdown -->
+        <div id="country-selection" class="hidden">
+            <label for="country-dropdown">Pick the country:</label>
+            <select id="country-dropdown"></select>
+            <br><br>
+            <button onclick="submitGuess()">Submit Guess</button>
+        </div>
+
+        <p id="guesses-left-container" class="hidden">Guesses left: <span id="guesses-left">5</span></p>
+    </div>
+
+    <script>
+        let currentStation = null;
+        let guessesLeft = 5;
+        let countdownInterval = null;
+        let gameActive = false;  // Flag to track if the game is active
+
+        // Function to fetch today's station from stations.json
+        async function fetchDailyStation() {
+            try {
+                const today = new Date().toISOString().split('T')[0];  // Get current date
+                const response = await fetch('stations.json');
+                const data = await response.json();
+                
+                // Filter stations to find today's station
+                const todaysStations = data.filter(station => station.date === today);
+                if (todaysStations.length > 0) {
+                    currentStation = todaysStations[0];  // Take the first station for today
+                } else {
+                    console.error("No daily station found for today");
+                    document.getElementById('status-message').textContent = "No daily station available today.";
+                }
+            } catch (error) {
+                console.error("Error fetching daily station:", error);
+                document.getElementById('status-message').textContent = "Error loading the daily station.";
+            }
+        }
+
+        // Function to start the game in Daily Mode
+        async function startDailyMode() {
+            if (gameActive) return;  // Prevent starting a new game if one is already active
+            gameActive = true;  // Set the game as active
+
+            await fetchDailyStation();
+
+            if (!currentStation) return;  // Ensure a station was found
+
+            guessesLeft = 5;
+            document.getElementById('guesses-left').textContent = guessesLeft;
+            document.getElementById('guesses-left-container').classList.remove('hidden');
+            document.getElementById('status-message').textContent = "";
+            document.getElementById('country-selection').classList.remove('hidden');
+
+            startStation(currentStation, 300);  // 5 minutes playtime
+
+            // Generate country dropdown options
+            generateCountryDropdown();
+        }
+
+        // Function to play the selected station and start countdown timer
+        function startStation(station, seconds) {
+            const radioPlayer = document.getElementById('radio-player');
+            radioPlayer.src = station.stationURL;  // Use stationURL from the current station
+            radioPlayer.play();
+
+            clearTimeout(countdownInterval);  // Clear any existing timer
+            countdownInterval = setTimeout(() => {
+                radioPlayer.pause();
+                document.getElementById('status-message').textContent = "Time's up!";
+                endGame();  // End the game when time is up
+            }, seconds * 1000);
+        }
+
+        // Function to fetch country data from JSON file
+        async function fetchCountries() {
+            try {
+                const response = await fetch('countries.json');
+                const data = await response.json();
+                return data.countries;
+            } catch (error) {
+                console.error("Error fetching countries:", error);
+                return [];  // Return an empty array in case of error
+            }
+        }
+
+        // Function to generate the country dropdown options
+        async function generateCountryDropdown() {
+            const dropdown = document.getElementById('country-dropdown');
+            dropdown.innerHTML = '';  // Clear previous options
+
+            const countries = await fetchCountries();
+
+            countries.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                dropdown.appendChild(option);
+            });
+        }
+
+        // Function to submit guess
+        function submitGuess() {
+            const selectedCountry = document.getElementById('country-dropdown').value;
+            if (selectedCountry === currentStation.country) {
+                document.getElementById('status-message').textContent = "Correct! You guessed the right country.";
+                endGame();  // Call endGame function if the guess is correct
+            } else {
+                guessesLeft--;
+                document.getElementById('guesses-left').textContent = guessesLeft;
+                if (guessesLeft === 0) {
+                    document.getElementById('status-message').textContent = "Game over! The correct country was " + currentStation.country + ".";
+                    endGame();  // Call endGame function if the user runs out of guesses
+                } else {
+                    document.getElementById('status-message').textContent = "Incorrect guess. Try again!";
+                }
+            }
+        }
+
+        // Function to end the game
+        function endGame() {
+            gameActive = false;  // Set the game as inactive
+            document.getElementById('country-selection').classList.add('hidden');  // Hide country selection
+            document.getElementById('guesses-left-container').classList.add('hidden');  // Hide guesses left
+        }
+    </script>
+</body>
+</html>
