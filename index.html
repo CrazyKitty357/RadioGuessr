@@ -60,6 +60,8 @@
 
         <p id="guesses-left-container" class="hidden">Guesses left: <span id="guesses-left">5</span></p>
         <p id="status-message"></p>
+        <p style="display: inline;" id="radio-garden"></p>
+        <a id="radio-garden-url" href="#"></a>
     </div>
 
     <script>
@@ -110,6 +112,7 @@
                 console.log("Today's stations:", todaysStations);  // Print filtered stations for debugging
                 if (todaysStations.length > 0) {
                     currentStation = todaysStations[0];  // Take the first station for today
+                    console.log(currentStation)
                 } else {
                     console.error("No daily station found for today");
                     document.getElementById('status-message').textContent = "No daily station available today.";
@@ -187,12 +190,18 @@
             const selectedCountry = document.getElementById('country-dropdown').value;
             if (selectedCountry === currentStation.country) {
                 document.getElementById('status-message').textContent = "You guessed the correct country!";
+                document.getElementById('radio-garden').textContent = "Listen to this station on radio garden: ";
+                document.getElementById('radio-garden-url').textContent = currentStation.radioGarden;
+                document.getElementById('radio-garden-url').href = currentStation.radioGarden;
                 endGame();  // Call endGame function if the guess is correct
             } else {
                 guessesLeft--;
                 document.getElementById('guesses-left').textContent = guessesLeft;
                 if (guessesLeft === 0) {
                     document.getElementById('status-message').textContent = "Game over! The correct country was " + currentStation.country + ".";
+                    document.getElementById('radio-garden').textContent = "Listen to this station on radio garden: ";
+                    document.getElementById('radio-garden-url').textContent = currentStation.radioGarden;
+                    document.getElementById('radio-garden-url').href = currentStation.radioGarden;
                     endGame();  // Call endGame function if the user runs out of guesses
                 } else {
                     document.getElementById('status-message').textContent = "Incorrect guess. Try again!";

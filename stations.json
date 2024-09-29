@@ -1,10 +1,19 @@
 [
-  { "date": "2024-09-29", "country": "Japan", "stationURL": "https://radio.garden/api/ara/content/listen/agGPOrdP/channel.mp3?r=1&1727567477094" },
-  { "date": "2024-09-30", "country": "Germany", "stationURL": "https://radio.garden/api/ara/content/listen/xsE94Tzl/channel.mp3?r=1&1727575913246" },
-  { "date": "2024-10-1", "country": "Ireland", "stationURL": "https://radio.garden/api/ara/content/listen/_CnCfxNt/channel.mp3?r=1&1727584324031" },
-  { "date": "2024-10-2", "country": "Chile", "stationURL": "https://radio.garden/api/ara/content/listen/g6FEw9TZ/channel.mp3?r=1&1727584718414" },
-  { "date": "2024-10-3", "country": "Madagascar", "stationURL": "https://radio.garden/api/ara/content/listen/ytMNnH8H/channel.mp3?r=1&1727584851024"},
-  { "date": "2024-10-4", "country": "Spain", "stationURL": "https://radio.garden/api/ara/content/listen/mwnQSDMY/channel.mp3?r=1&1727584992356"},
-  { "date": "2024-10-5", "country": "United States", "stationURL": "https://radio.garden/api/ara/content/listen/Ilmc2uaC/channel.mp3?r=1&1727587980624"},
-  { "date":"2024-10-6", "country": "Brazil", "stationURL": "https://radio.garden/api/ara/content/listen/tF2-otqP/channel.mp3?r=1&1727589409673"}
+  { "date": "2024-09-29", "country": "Japan", "stationURL": "https://radio.garden/api/ara/content/listen/agGPOrdP/channel.mp3?r=1&1727567477094", "radioGarden": "https://radio.garden/listen/ashiyaradio/agGPOrdP"},
+  { "date": "2024-09-30", "country": "Germany", "stationURL": "https://radio.garden/api/ara/content/listen/xsE94Tzl/channel.mp3?r=1&1727575913246", "radioGarden": "https://radio.garden/listen/mabu-beatz-deep-house-fm/xsE94Tzl"},
+  { "date": "2024-10-1", "country": "Ireland", "stationURL": "https://radio.garden/api/ara/content/listen/_CnCfxNt/channel.mp3?r=1&1727584324031", "radioGarden": "https://radio.garden/listen/radio-siamsa/_CnCfxNt"},
+  { "date": "2024-10-2", "country": "Chile", "stationURL": "https://radio.garden/api/ara/content/listen/g6FEw9TZ/channel.mp3?r=1&1727584718414", "radioGarden": "https://radio.garden/listen/radio-uchile-102-5-fm/g6FEw9TZ" },
+  { "date": "2024-10-3", "country": "Madagascar", "stationURL": "https://radio.garden/api/ara/content/listen/ytMNnH8H/channel.mp3?r=1&1727584851024", "radioGarden": "https://radio.garden/listen/radio-fmfoi-107-4-m-hz/ytMNnH8H"},
+  { "date": "2024-10-4", "country": "Spain", "stationURL": "https://radio.garden/api/ara/content/listen/mwnQSDMY/channel.mp3?r=1&1727584992356", "radioGarden": "https://radio.garden/listen/-88-2-fm-control-music/mwnQSDMY"},
+  { "date": "2024-10-5", "country": "United States", "stationURL": "https://radio.garden/api/ara/content/listen/Ilmc2uaC/channel.mp3?r=1&1727587980624", "radioGarden": "https://radio.garden/listen/soma-fm-xmas-in-frisko/Ilmc2uaC"},
+  { "date": "2024-10-6", "country": "Brazil", "stationURL": "https://radio.garden/api/ara/content/listen/tF2-otqP/channel.mp3?r=1&1727589409673", "radioGarden": "https://radio.garden/listen/classicos-do-funk/tF2-otqP"},
+  { "date": "2024-10-7", "country": "Norway", "stationURL": "https://radio.garden/api/ara/content/listen/x1TDbxPr/channel.mp3?r=1&1727598686337", "radioGarden": "https://radio.garden/listen/nrj/x1TDbxPr"},
+  { "date": "2024-10-8", "country": "Bermuda", "stationURL": "https://radio.garden/api/ara/content/listen/mqdXmYNU/channel.mp3?r=1&1727598238469", "radioGarden": "https://radio.garden/listen/dr-dick-s-dub-shack/mqdXmYNU"},
+  { "date": "2024-10-9", "country": "Russia", "stationURL": "https://radio.garden/api/ara/content/listen/SYkKWijn/channel.mp3?r=1&1727599272621", "radioGarden": "https://radio.garden/listen/101-ru-sex/SYkKWijn"},
+  { "date": "2024-10-10", "country": "Netherlands", "stationURL": "https://radio.garden/api/ara/content/listen/vpgE9gCi/channel.mp3?r=1&1727599974904", "radioGarden": "https://radio.garden/listen/concertzender-x-rated/vpgE9gCi"},
+  { "date": "2024-10-11", "country": "North Korea", "stationURL": "https://radio.garden/api/ara/content/listen/NPzavm5p/channel.mp3?r=1&1727600136106", "radioGarden": "https://radio.garden/listen/pyongyang-fm-105-2/NPzavm5p"},
+  { "date": "2024-10-12", "country": "Egypt", "stationURL": "https://radio.garden/api/ara/content/listen/1MEn6R8R/channel.mp3?r=1&1727600463602", "radioGarden": "https://radio.garden/listen/radiosotak/1MEn6R8R"},
+  { "date": "2024-10-13", "country": "Singapore", "stationURL": "https://radio.garden/api/ara/content/listen/u7zNESvo/channel.mp3?r=1&1727600820797", "radioGarden": "https://radio.garden/listen/kiss-92fm/u7zNESvo"},
+  { "date": "2024-10-14", "country": "India", "stationURL": "https://radio.garden/api/ara/content/listen/AHgJRFsc/channel.mp3?r=1&1727601007404", "radioGarden": "https://radio.garden/listen/hits-of-bollywood/AHgJRFsc"},
+  { "date":"2024-10-15", "country": "Australia", "stationURL":"https://radio.garden/api/ara/content/listen/cCwaIGh6/channel.mp3?r=1&1727601233336", "radioGarden":"https://radio.garden/listen/radio-kasoot/cCwaIGh6"}
 ]
