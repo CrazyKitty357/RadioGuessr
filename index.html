@@ -40,6 +40,7 @@
         async function fetchDailyStation() {
             try {
                 const today = new Date().toISOString().split('T')[0];  // Get current date
+                console.log("Today's date:", today);  // Print the date for debugging
                 const response = await fetch('stations.json');
                 const data = await response.json();
                 
