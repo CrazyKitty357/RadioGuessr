@@ -37,26 +37,30 @@
         let gameActive = false;  // Flag to track if the game is active
 
         // Function to fetch today's station from stations.json
-        async function fetchDailyStation() {
-            try {
-                const today = new Date().toISOString().split('T')[0];  // Get current date
-                console.log("Today's date:", today);  // Print the date for debugging
-                const response = await fetch('stations.json');
-                const data = await response.json();
-                
-                // Filter stations to find today's station
-                const todaysStations = data.filter(station => station.date === today);
-                if (todaysStations.length > 0) {
-                    currentStation = todaysStations[0];  // Take the first station for today
-                } else {
-                    console.error("No daily station found for today");
-                    document.getElementById('status-message').textContent = "No daily station available today.";
-                }
-            } catch (error) {
-                console.error("Error fetching daily station:", error);
-                document.getElementById('status-message').textContent = "Error loading the daily station.";
-            }
+// Function to fetch today's station from stations.json
+async function fetchDailyStation() {
+    try {
+        const today = new Date();
+        const formattedDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;  // Format date as YYYY-M-D
+        console.log("Today's date:", formattedDate);  // Print the date for debugging
+        const response = await fetch('stations.json');
+        const data = await response.json();
+        
+        // Filter stations to find today's station
+        const todaysStations = data.filter(station => station.date === formattedDate);
+        console.log("Today's stations:", todaysStations);  // Print filtered stations for debugging
+        if (todaysStations.length > 0) {
+            currentStation = todaysStations[0];  // Take the first station for today
+        } else {
+            console.error("No daily station found for today");
+            document.getElementById('status-message').textContent = "No daily station available today.";
         }
+    } catch (error) {
+        console.error("Error fetching daily station:", error);
+        document.getElementById('status-message').textContent = "Error loading the daily station.";
+    }
+}
+
 
         // Function to start the game in Daily Mode
         async function startDailyMode() {
