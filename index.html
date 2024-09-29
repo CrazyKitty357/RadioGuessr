@@ -109,10 +109,10 @@
                 
                 // Filter stations to find today's station
                 const todaysStations = data.filter(station => station.date === utcDate);
-                console.log("Today's stations:", todaysStations);  // Print filtered stations for debugging
+                // console.log("Today's stations:", todaysStations);  // Print filtered stations for debugging
                 if (todaysStations.length > 0) {
                     currentStation = todaysStations[0];  // Take the first station for today
-                    console.log(currentStation)
+                    // console.log(currentStation) // no cheating ;)
                 } else {
                     console.error("No daily station found for today");
                     document.getElementById('status-message').textContent = "No daily station available today.";
