@@ -8,13 +8,13 @@
         body { 
             font-family: Arial, sans-serif; 
             margin: 0; 
-            overflow: hidden; /* Prevent scroll bars from appearing */
+            overflow: hidden;
         }
         .game-container { 
             text-align: center; 
             padding: 50px; 
             position: relative; 
-            z-index: 1; /* Ensure the text is above the video */
+            z-index: 1;
         }
         .guess-btn { 
             padding: 10px 20px; 
@@ -23,8 +23,18 @@
         .hidden { 
             display: none; 
         }
+        #copy-button { 
+            margin-top: 15px; 
+            cursor: pointer; 
+        }
+        #copy-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        button {
+            cursor: pointer;
+        }
     </style>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body onload="showDate(); updateCountdown();">
     <div class="game-container">
@@ -47,24 +57,26 @@
         <p id="guesses-left-container" class="hidden">Guesses left: <span id="guesses-left">5</span></p>
         <p id="status-message"></p>
         <p style="display: inline;" id="radio-garden"></p>
-        <a id="radio-garden-url" href="#"></a>
+        <a id="radio-garden-url" href="#" class="hidden"></a>
+        <div>
+            <button id="copy-button" class="hidden" onclick="copyToClipboard()">Share</button>
+        </div>
     </div>
 
     <script>
         let currentStation = null;
         let guessesLeft = 5;
         let countdownInterval = null;
-        let gameActive = false;  // Flag to track if the game is active
+        let gameActive = false;
+        let userGuesses = []; // Store user's guesses
 
-        function showDate(){
+        function showDate() {
             const today = new Date();
             const utcDate = today.toISOString().split('T')[0];
             document.getElementById('dateText').textContent = utcDate;
-            // console.log("tried to show date on page");
             setTimeout(showDate, 1000);
         }
 
-        // Countdown to 00:00:00 UTC
         function updateCountdown() {
             const now = new Date();
             const nextUTCMidnight = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
@@ -73,96 +85,87 @@
             const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-            // Display the result in the countdown div
             document.getElementById('countdown').innerHTML =
                 "Next Station in " +
                 ("0" + hours).slice(-2) + ":" +
                 ("0" + minutes).slice(-2) + ":" +
                 ("0" + seconds).slice(-2);
-            // Automatically update every second
             setTimeout(updateCountdown, 1000);
         }
 
-        // Function to fetch today's station from stations.json
         async function fetchDailyStation() {
             try {
                 const today = new Date();
-                const utcDate = today.toISOString().split('T')[0];  // Get current date in UTC format (YYYY-MM-DD)
-                console.log("Today's date in UTC:", utcDate);  // Print the date for debugging
+                const utcDate = today.toISOString().split('T')[0];
                 const response = await fetch('https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json');
                 const data = await response.json();
                 
-                // Filter stations to find today's station
                 const todaysStations = data.filter(station => station.date === utcDate);
-                // console.log("Today's stations:", todaysStations);  // Print filtered stations for debugging
                 if (todaysStations.length > 0) {
-                    currentStation = todaysStations[0];  // Take the first station for today
-                    // console.log(currentStation) // no cheating ;)
+                    currentStation = todaysStations[0];
+
+                    // Set the radio garden information
+                    document.getElementById('radio-garden-url').textContent = currentStation.radioGarden;
+                    document.getElementById('radio-garden-url').href = currentStation.radioGarden;
                 } else {
-                    console.error("No daily station found for today");
                     document.getElementById('status-message').textContent = "No daily station available today.";
                 }
             } catch (error) {
-                console.error("Error fetching daily station:", error);
                 document.getElementById('status-message').textContent = "Error loading the daily station.";
             }
         }
 
-        // Function to start the game in Daily Mode
         async function startDailyMode() {
-            if (gameActive) return;  // Prevent starting a new game if one is already active
-            gameActive = true;  // Set the game as active
+            if (gameActive) return;
+            gameActive = true;
 
             await fetchDailyStation();
 
-            if (!currentStation) return;  // Ensure a station was found
+            if (!currentStation) return;
 
             guessesLeft = 5;
+            userGuesses = []; // Reset guesses
+
             document.getElementById('radio-player').classList.remove('hidden');
             document.getElementById('guesses-left').textContent = guessesLeft;
             document.getElementById('guesses-left-container').classList.remove('hidden');
             document.getElementById('status-message').textContent = "";
             document.getElementById('country-selection').classList.remove('hidden');
+            document.getElementById('copy-button').classList.add('hidden'); // Hide copy button at game start
 
-            startStation(currentStation, 3600);  // 5 minutes playtime
+            startStation(currentStation, 1000000);
 
-            // Generate country dropdown options
             generateCountryDropdown();
         }
 
-        // Function to play the selected station and start countdown timer
         function startStation(station, seconds) {
             const radioPlayer = document.getElementById('radio-player');
-            radioPlayer.src = station.stationURL;  // Use stationURL from the current station
+            radioPlayer.src = station.stationURL;
             radioPlayer.play();
 
-            clearTimeout(countdownInterval);  // Clear any existing timer
+            clearTimeout(countdownInterval);
             countdownInterval = setTimeout(() => {
                 radioPlayer.pause();
                 document.getElementById('status-message').textContent = "Time's up!";
-                endGame();  // End the game when time is up
+                endGame(false);
             }, seconds * 1000);
         }
 
-        // Function to fetch country data from JSON file
         async function fetchCountries() {
             try {
                 const response = await fetch('countries.json');
                 const data = await response.json();
                 return data.countries;
             } catch (error) {
-                console.error("Error fetching countries:", error);
-                return [];  // Return an empty array in case of error
+                return [];
             }
         }
 
-        // Function to generate the country dropdown options
         async function generateCountryDropdown() {
             const dropdown = document.getElementById('country-dropdown');
-            dropdown.innerHTML = '';  // Clear previous options
+            dropdown.innerHTML = '';
 
             const countries = await fetchCountries();
-
             countries.forEach(country => {
                 const option = document.createElement('option');
                 option.value = country;
@@ -171,35 +174,46 @@
             });
         }
 
-        // Function to submit guess
         function submitGuess() {
             const selectedCountry = document.getElementById('country-dropdown').value;
+
             if (selectedCountry === currentStation.country) {
+                userGuesses.push('✅'); // Correct guess
                 document.getElementById('status-message').textContent = "You guessed the correct country!";
-                document.getElementById('radio-garden').textContent = "Listen to this station on radio garden: ";
-                document.getElementById('radio-garden-url').textContent = currentStation.radioGarden;
-                document.getElementById('radio-garden-url').href = currentStation.radioGarden;
-                endGame();  // Call endGame function if the guess is correct
+                endGame(true); // Correct guess
             } else {
+                userGuesses.push('❌'); // Incorrect guess
                 guessesLeft--;
                 document.getElementById('guesses-left').textContent = guessesLeft;
+
                 if (guessesLeft === 0) {
-                    document.getElementById('status-message').textContent = "Game over! The correct country was " + currentStation.country + ".";
-                    document.getElementById('radio-garden').textContent = "Listen to this station on radio garden: ";
-                    document.getElementById('radio-garden-url').textContent = currentStation.radioGarden;
-                    document.getElementById('radio-garden-url').href = currentStation.radioGarden;
-                    endGame();  // Call endGame function if the user runs out of guesses
+                    document.getElementById('status-message').textContent = "Game over! You didn't guess the correct country.";
+                    endGame(false); // Out of guesses
                 } else {
                     document.getElementById('status-message').textContent = "Incorrect guess. Try again!";
                 }
             }
         }
 
-        // Function to end the game
-        function endGame() {
-            gameActive = false;  // Set the game as inactive
-            document.getElementById('country-selection').classList.add('hidden');  // Hide country selection
-            document.getElementById('guesses-left-container').classList.add('hidden');  // Hide guesses left
+        function endGame(correct) {
+            gameActive = false;
+            document.getElementById('country-selection').classList.add('hidden');
+            document.getElementById('guesses-left-container').classList.add('hidden');
+            document.getElementById('copy-button').classList.remove('hidden'); // Show copy button
+            document.getElementById('radio-garden').textContent = "Listen to this station on radio garden: ";
+            document.getElementById('radio-garden-url').classList.remove('hidden');
+        }
+
+        function copyToClipboard() {
+            const utcDate = document.getElementById('dateText').textContent;
+            const lastFiveGuesses = userGuesses.slice(-5).join('\n'); // Take the last 5 guesses
+            const textToCopy = `RadioGuessr: ${utcDate}\n${lastFiveGuesses}`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("Guesses shared to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy: ", err);
+            });
         }
     </script>
 </body>
