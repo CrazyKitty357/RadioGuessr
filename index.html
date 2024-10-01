@@ -94,33 +94,44 @@
         }
 
         async function fetchDailyStation() {
-            try {
-                const today = new Date();
-                const utcDate = today.toISOString().split('T')[0];
-                const response = await fetch('https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json');
-                const data = await response.json();
-                
-                const todaysStations = data.filter(station => station.date === utcDate);
-                if (todaysStations.length > 0) {
-                    currentStation = todaysStations[0];
+    try {
+        const today = new Date();
+        const utcDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        
+        const response = await fetch('https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json');
+        const data = await response.json();
 
-                    // Set the radio garden information
-                    document.getElementById('radio-garden-url').textContent = currentStation.radioGarden;
-                    document.getElementById('radio-garden-url').href = currentStation.radioGarden;
-                } else {
-                    document.getElementById('status-message').textContent = "No daily station available today.";
-                }
-            } catch (error) {
-                document.getElementById('status-message').textContent = "Error loading the daily station.";
-            }
+        // Normalize the dates in the JSON to ensure consistency
+        const todaysStations = data.filter(station => {
+            // Convert station date to UTC format with leading zeros
+            let [year, month, day] = station.date.split('-');
+            month = month.padStart(2, '0'); // Ensure two digits for month
+            day = day.padStart(2, '0');     // Ensure two digits for day
+            const formattedDate = `${year}-${month}-${day}`;
+
+            return formattedDate === utcDate;
+        });
+
+        if (todaysStations.length > 0) {
+            currentStation = todaysStations[0];
+
+            // Set the radio garden information
+            document.getElementById('radio-garden-url').textContent = currentStation.radioGarden;
+            document.getElementById('radio-garden-url').href = currentStation.radioGarden;
+        } else {
+            document.getElementById('status-message').textContent = "No daily station available today.";
         }
+    } catch (error) {
+        document.getElementById('status-message').textContent = "Error loading the daily station.";
+    }
+}
+
 
         async function startDailyMode() {
             if (gameActive) return;
             gameActive = true;
 
             await fetchDailyStation();
-
             if (!currentStation) return;
 
             guessesLeft = 5;
