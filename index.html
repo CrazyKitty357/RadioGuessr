@@ -35,11 +35,13 @@
             cursor: pointer;
         }
     </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body onload="showDate(); updateCountdown();">
     <div class="game-container">
         <h1>RadioGuessr</h1>
         <h3>Guess where the radio station is located.</h3>
+        <button id="toggle-theme">toggle light/dark mode</button>
         <p id="dateText">2024-00-00</p>
         <p id="countdown">Next Station in 00:00:00</p>
         <audio id="radio-player" class="hidden" controls></audio>
@@ -69,6 +71,7 @@
         let countdownInterval = null;
         let gameActive = false;
         let userGuesses = []; // Store user's guesses
+        let correctCountry = false;
 
         function showDate() {
             const today = new Date();
@@ -137,12 +140,15 @@
             guessesLeft = 5;
             userGuesses = []; // Reset guesses
 
+            document.getElementById('play-button').classList.add('hidden');
             document.getElementById('radio-player').classList.remove('hidden');
             document.getElementById('guesses-left').textContent = guessesLeft;
             document.getElementById('guesses-left-container').classList.remove('hidden');
             document.getElementById('status-message').textContent = "";
             document.getElementById('country-selection').classList.remove('hidden');
             document.getElementById('copy-button').classList.add('hidden'); // Hide copy button at game start
+            document.getElementById('radio-garden').textContent = "";
+            document.getElementById('radio-garden-url').classList.add('hidden');
 
             startStation(currentStation, 1000000);
 
@@ -198,7 +204,8 @@
                 document.getElementById('guesses-left').textContent = guessesLeft;
 
                 if (guessesLeft === 0) {
-                    document.getElementById('status-message').textContent = "Game over! You didn't guess the correct country.";
+                    document.getElementById('status-message').textContent = "Game over! You didn't guess the correct country, which is " + currentStation.country + ".";
+
                     endGame(false); // Out of guesses
                 } else {
                     document.getElementById('status-message').textContent = "Incorrect guess. Try again!";
@@ -208,6 +215,8 @@
 
         function endGame(correct) {
             gameActive = false;
+            document.getElementById('play-button').classList.remove('hidden');
+            document.getElementById('play-button').textContent = "Play again! (it's the same station)";
             document.getElementById('country-selection').classList.add('hidden');
             document.getElementById('guesses-left-container').classList.add('hidden');
             document.getElementById('copy-button').classList.remove('hidden'); // Show copy button
@@ -225,6 +234,24 @@
             }).catch(err => {
                 alert("Failed to copy: ", err);
             });
+        }
+
+        const toggleButton = document.getElementById('toggle-theme');
+
+        toggleButton.addEventListener('click', () => {
+            const html = document.documentElement;
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme)
         }
     </script>
 </body>
