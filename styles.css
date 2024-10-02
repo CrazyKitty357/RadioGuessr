@@ -1,6 +1,6 @@
 /* Default styles (light mode) */
 html[data-theme="light"] {
-    background-image: linear-gradient(to bottom right, rgb(255, 255, 255), rgb(190, 190, 190));
+    background-image: linear-gradient(to bottom right, rgb(255, 255, 255), rgb(230, 223, 203));
     background-size: cover;
     background-repeat: no-repeat;
     height: 100%;
