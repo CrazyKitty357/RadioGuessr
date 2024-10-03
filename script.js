@@ -28,50 +28,92 @@ function updateCountdown() {
     setTimeout(updateCountdown, 1000);
 }
 
-async function fetchDailyStation() {
-try {
-const today = new Date();
-const utcDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+async function populateDateDropdown() {
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json');
+        const data = await response.json();
+        const dropdown = document.getElementById('previous-date-dropdown');
+        
+        // Get today's date
+        const today = new Date().toISOString().split('T')[0];
+        console.log("Today's date:", today); // Log today's date
 
-const response = await fetch('https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json');
-const data = await response.json();
-
-// Normalize the dates in the JSON to ensure consistency
-const todaysStations = data.filter(station => {
-    // Convert station date to UTC format with leading zeros
-    let [year, month, day] = station.date.split('-');
-    month = month.padStart(2, '0'); // Ensure two digits for month
-    day = day.padStart(2, '0');     // Ensure two digits for day
-    const formattedDate = `${year}-${month}-${day}`;
-
-    return formattedDate === utcDate;
-});
-
-if (todaysStations.length > 0) {
-    currentStation = todaysStations[0];
-
-    // Set the radio garden information
-    document.getElementById('radio-garden-url').textContent = currentStation.radioGarden;
-    document.getElementById('radio-garden-url').href = currentStation.radioGarden;
-} else {
-    document.getElementById('status-message').textContent = "No daily station available today.";
-}
-} catch (error) {
-document.getElementById('status-message').textContent = "Error loading the daily station.";
-}
+        // Populate dropdown with past dates
+        data.forEach(station => {
+            let stationDate = station.date;
+            console.log("Checking station date:", stationDate); // Log each station date
+            if (stationDate <= today) {  // Only include past or today's dates
+                const option = document.createElement('option');
+                option.value = stationDate;
+                option.textContent = stationDate;
+                dropdown.appendChild(option);
+            }
+        });
+    } catch (error) {
+        console.error('Error loading stations.json:', error);
+    }
 }
 
+async function fetchDailyStation(selectedDate) {
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json');
+        const data = await response.json();
 
-async function startDailyMode() {
+        const station = data.find(station => station.date === selectedDate);
+        if (station) {
+            currentStation = station;
+        } else {
+            console.error(`No station found for date: ${selectedDate}`);
+        }
+    } catch (error) {
+        console.error('Error fetching daily station:', error);
+    }
+}
+
+
+function startPreviousDailyMode() {
+    const dropdown = document.getElementById('previous-date-dropdown');
+    const selectedDate = dropdown.value;
+    
+    if (!selectedDate) {
+        document.getElementById('status-message').textContent = "Please select a valid date.";
+        return;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    if (selectedDate > today) {
+        document.getElementById('status-message').textContent = "The selected date is in the future.";
+        return;
+    }
+
+    startDailyMode(selectedDate);
+}
+
+function playDailyMode() {
+    const today = new Date();
+    const utcDate = today.toISOString().split('T')[0];
+    
+    // Set the dropdown value to today's date
+    const dropdown = document.getElementById('previous-date-dropdown');
+    dropdown.value = utcDate; // Set the dropdown to today's date
+
+    startDailyMode(utcDate);
+}
+
+
+async function startDailyMode(selectedDate) {
     if (gameActive) return;
     gameActive = true;
 
-    await fetchDailyStation();
+    await fetchDailyStation(selectedDate);
     if (!currentStation) return;
 
     guessesLeft = 5;
     userGuesses = []; // Reset guesses
 
+    document.getElementById('dateText').textContent = selectedDate;
+    document.getElementById('previous-date-dropdown').classList.add('hidden');
+    document.getElementById('previous-date-button').classList.add('hidden');
     document.getElementById('play-button').classList.add('hidden');
     document.getElementById('radio-player').classList.remove('hidden');
     document.getElementById('guesses-left').textContent = guessesLeft;
@@ -80,12 +122,16 @@ async function startDailyMode() {
     document.getElementById('country-selection').classList.remove('hidden');
     document.getElementById('copy-button').classList.add('hidden'); // Hide copy button at game start
     document.getElementById('radio-garden').textContent = "";
+    document.getElementById('radio-garden-url').textContent = currentStation.radioGarden
+    document.getElementById('radio-garden-url').href = currentStation.radioGarden
     document.getElementById('radio-garden-url').classList.add('hidden');
 
     startStation(currentStation, 1000000);
 
     generateCountryDropdown();
 }
+
+
 
 function startStation(station, seconds) {
     const radioPlayer = document.getElementById('radio-player');
@@ -187,7 +233,9 @@ async function submitGuess() {
 function endGame(correct) {
     gameActive = false;
     document.getElementById('play-button').classList.remove('hidden');
-    document.getElementById('play-button').textContent = "Play again! (it's the same station)";
+    document.getElementById('play-button').textContent = "Play today's game again! (it's the same station)";
+    document.getElementById('previous-date-dropdown').classList.remove('hidden');
+    document.getElementById('previous-date-button').classList.remove('hidden');
     document.getElementById('country-selection').classList.add('hidden');
     document.getElementById('guesses-left-container').classList.add('hidden');
     document.getElementById('copy-button').classList.remove('hidden'); // Show copy button
@@ -196,9 +244,10 @@ function endGame(correct) {
 }
 
 function copyToClipboard() {
-    const utcDate = document.getElementById('dateText').textContent;
+    const dropdown = document.getElementById('previous-date-dropdown');
+    const selectedDate = dropdown.value; // Get the selected date from the dropdown
     const lastFiveGuesses = userGuesses.slice(-5).join('\n'); // Take the last 5 guesses
-    const textToCopy = `RadioGuessr: ${utcDate}\n${lastFiveGuesses}`;
+    const textToCopy = `RadioGuessr: ${selectedDate}\n${lastFiveGuesses}`;
 
     navigator.clipboard.writeText(textToCopy).then(() => {
         alert("Guesses shared to clipboard!");

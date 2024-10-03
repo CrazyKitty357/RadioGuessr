@@ -37,7 +37,7 @@
     </style>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body onload="showDate(); updateCountdown();">
+<body onload="showDate(); updateCountdown(); populateDateDropdown();">
     <div class="game-container">
         <h1>RadioGuessr</h1>
         <h3>Guess where the radio station is located.</h3>
@@ -46,8 +46,16 @@
         <p id="countdown">Next Station in 00:00:00</p>
         <audio id="radio-player" class="hidden" controls></audio>
         <br>
-        <button id="play-button" onclick="startDailyMode()">Play Game</button>
-        
+        <button id="play-button" onclick="playDailyMode()">Play Today's Game</button>
+        <br><br>
+
+        <!-- Dropdown for Previous Dates -->
+        <label for="previous-date-dropdown">Select a previous date:</label>
+        <select id="previous-date-dropdown">
+            <option value="">Select a date</option> <!-- Default option -->
+        </select>
+        <button id="previous-date-button" onclick="startPreviousDailyMode()">Play Previous Game</button>
+
         <!-- Country Dropdown -->
         <div id="country-selection" class="hidden">
             <label for="country-dropdown">Pick the country:</label>
@@ -66,5 +74,6 @@
     </div>
 
     <script src="script.js"></script>
+</body>
 </body>
 </html>
