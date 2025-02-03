@@ -103,10 +103,9 @@ function EndGame(won) {
 
   if (!won) {
     document.getElementById("guess-correct-text").innerText = "Game Over! ❌";
+    document.getElementById("confetti-emoji").hidden = true;
   }
 }
-
-function ShowCountryName(icon) {}
 
 document.addEventListener("DOMContentLoaded", () => {
   fetch("countries.json")
