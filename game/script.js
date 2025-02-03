@@ -99,6 +99,7 @@ function EndGame(won) {
   document.getElementById("country-selector").hidden = true;
   document.getElementById("guess-country-name").hidden = true;
   document.getElementById("confetti-emoji").hidden = false;
+  document.getElementById("radio-url").hidden = false;
 
   if (!won) {
     document.getElementById("guess-correct-text").innerText = "Game Over! ❌";

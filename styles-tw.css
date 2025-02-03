@@ -545,6 +545,16 @@ body {
   background: rgb(8, 8, 62);
   background: linear-gradient( 0deg, rgba(5, 5, 46, 1) 0%, rgba(0, 0, 0, 1) 100% );
 }
+.link {
+  color: var(--color-blue-700);
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+}
+.link:active {
+  color: var(--color-violet-700);
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+}
 .btn {
   border-radius: 0.25rem;
   padding-inline: calc(var(--spacing) * 4);
