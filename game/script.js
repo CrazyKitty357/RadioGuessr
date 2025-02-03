@@ -45,10 +45,10 @@ function StartGame() {
   document.getElementById("guess-country-name").hidden = false;
   document.getElementById("guess-correct-text").hidden = false;
   // console.log(jsonData[CorrectCountry]?.globe);
-  document.body.style.setProperty(
-    "--globe-emoji",
-    `"${jsonData[CorrectCountry]?.globe}"`,
-  );
+  // document.body.style.setProperty(
+  // "--globe-emoji",
+  // `"${jsonData[CorrectCountry]?.globe}"`,
+  // );
   var link = document.querySelector("link[rel~='icon']");
   if (!link) {
     link = document.createElement("link");
