@@ -1,0 +1,10 @@
+[
+  {
+    "Japan": { "icon": "🇯🇵" },
+    "United States": { "icon": "🇺🇸" },
+    "Canada": { "icon": "🇨🇦" },
+    "United Kingdom": { "icon": "🇬🇧" },
+    "Germany": { "icon": "🇩🇪" },
+    "Russia": { "icon": "🇷🇺" }
+  }
+]

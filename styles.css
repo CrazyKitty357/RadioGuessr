@@ -1,0 +1,57 @@
+@import "tailwindcss";
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    color: white;
+    background: rgb(8, 8, 62);
+    background: linear-gradient(
+        0deg,
+        rgba(5, 5, 46, 1) 0%,
+        rgba(0, 0, 0, 1) 100%
+    );
+}
+
+.btn {
+    @apply font-bold py-2 px-4 rounded;
+}
+
+.btn.selected {
+    @apply bg-blue-700;
+}
+.btn-blue {
+    @apply bg-blue-500 text-white;
+}
+.btn-blue:hover {
+    @apply bg-blue-700;
+}
+
+.title {
+    @apply text-3xl font-bold;
+}
+
+.center {
+    @apply grid place-items-center h-screen;
+}
+
+.emoji-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.confetti-emoji {
+    font-size: 4rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+}
+
+.confetti-emoji:hover {
+    transform: scale(1.2);
+}

@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, inital-scale=1.0" />
+        <title>RadioGuessr Rewrite | Game</title>
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🌎</text></svg>"
+        />
+        <link rel="stylesheet" type="text/css" href="../styles-tw.css" />
+    </head>
+    <body>
+        <div class="center">
+            <center>
+                <button
+                    class="btn btn-blue"
+                    id="play-btn"
+                    onclick="StartGame()"
+                >
+                    PLAY GAME!
+                </button>
+                <div>
+                    <audio
+                        id="audio-player"
+                        src="https://nonstopcasiopea.radioca.st/;"
+                        controls
+                        hidden
+                    ></audio>
+                </div>
+                <div
+                    id="country-selector"
+                    class="grid h56 grid-cols-3 content-center gap-3"
+                    hidden
+                >
+                    <div>
+                        <button
+                            id="country-1"
+                            class="btn btn-blue"
+                            onclick="ToggleButton(this.id)"
+                        >
+                            🇺🇸
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            id="country-2"
+                            class="btn btn-blue"
+                            onclick="ToggleButton(this.id)"
+                        >
+                            🇨🇦
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            id="country-3"
+                            class="btn btn-blue"
+                            onclick="ToggleButton(this.id)"
+                        >
+                            🇬🇧
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            id="country-4"
+                            class="btn btn-blue"
+                            onclick="ToggleButton(this.id)"
+                        >
+                            🇩🇪
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            id="country-5"
+                            class="btn btn-blue"
+                            onclick="ToggleButton(this.id)"
+                        >
+                            🇯🇵
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            id="country-6"
+                            class="btn btn-blue"
+                            onclick="ToggleButton(this.id)"
+                        >
+                            🇷🇺
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <p id="guess-country-name" class="font-bold" hidden>
+                        No Selected Country
+                    </p>
+                </div>
+                <button
+                    id="guess-btn"
+                    class="btn btn-blue"
+                    onclick="MakeGuess()"
+                    hidden
+                >
+                    <p>Guess Country</p>
+                </button>
+                    <p id="guess-correct-text" class="font-bold" hidden>
+                        Select a Country!
+                    </p>
+                    <div
+                        id="confetti-emoji"
+                        class="confetti-emoji"
+                        onmouseover="triggerConfetti(event)"
+                        hidden
+                    >
+                        🎉
+                    </div>
+                </div>
+            </center>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
