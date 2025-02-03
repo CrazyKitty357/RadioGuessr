@@ -3,7 +3,7 @@
     <header>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, inital-scale=1.0" />
-        <title>RadioGuessr Rewrite</title>
+        <title>RadioGuessr</title>
         <link
             rel="icon"
             href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🌎</text></svg>"
@@ -17,7 +17,8 @@
                 <h1 class="title">RadioGuessr</h1>
                 <p>A game about guessing where radio stations are.</p>
                 <button id="todays-game" class="btn btn-blue">
-                    play today's game!
+                    play today's game! <br />
+                    {countdown}
                 </button>
                 <!-- <button id="old-game" class="btn btn-blue">
                     play old game!
@@ -25,17 +26,5 @@
             </center>
         </div>
     </body>
-    <script>
-        function goToPage(url) {
-            window.location.href = url;
-        }
-
-        // BUTTONS
-        document.getElementById("todays-game").onclick = function () {
-            goToPage("game/?date=today");
-        };
-        document.getElementById("old-game").onclick = function () {
-            goToPage("game/?date=old");
-        };
-    </script>
+    <script src="script.js"></script>
 </html>

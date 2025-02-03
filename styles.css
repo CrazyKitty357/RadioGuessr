@@ -63,6 +63,7 @@ body::before {
 }
 .btn-blue:hover {
     @apply bg-blue-700;
+    cursor: pointer;
 }
 
 .title {

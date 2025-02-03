@@ -600,6 +600,7 @@ body::before {
 }
 .btn-blue:hover {
   background-color: var(--color-blue-700);
+  cursor: pointer;
 }
 .title {
   font-size: var(--text-3xl);

@@ -1,4 +1,6 @@
-const CorrectCountry = "Germany";
+let CorrectCountry = "Germany";
+let RadioGardenURL = "https://gensokyoradio.net/";
+let StationURL = "https://stream.gensokyoradio.net/3/";
 let selectedButtonId = null;
 let jsonData = null;
 let guessCount = 0;
@@ -6,10 +8,22 @@ const maxGuesses = 2;
 var SelectedCountry = null;
 var wonVar = false;
 
+const url = new URL(window.location.href);
+const dateParam = url.searchParams.get("date");
+
+// console.log(dateParam);
+
 fetch("countries.json")
   .then((response) => response.json())
   .then((data) => {
     jsonData = data[0];
+  })
+  .catch((error) => console.error("Error loading JSON:", error));
+
+fetch("stations.json")
+  .then((response) => response.json())
+  .then((data) => {
+    stationData = data;
   })
   .catch((error) => console.error("Error loading JSON:", error));
 
@@ -35,7 +49,9 @@ function ToggleButton(buttonId) {
 }
 
 function StartGame() {
+  setRadio(dateParam);
   guessCount = 0;
+  console.log("no cheating :)");
   document.getElementById("play-btn").hidden = true;
   document.getElementById("guess-btn").hidden = false;
   document.getElementById("audio-player").hidden = false;
@@ -64,19 +80,19 @@ function MakeGuess() {
     return;
   }
   if (guessCount >= maxGuesses) {
-    console.log("Game over! No more guesses.");
+    // console.log("Game over! No more guesses.");
     return;
   }
 
   const button = document.getElementById(selectedButtonId);
   if (button) {
     guessCount++;
-    console.log("GUESSED:", button.innerText);
+    // console.log("GUESSED:", button.innerText);
     const guessedText = button.innerText;
     const correctIcon = jsonData[CorrectCountry]?.icon;
 
     if (guessedText === correctIcon) {
-      console.log("YAY");
+      // console.log("YAY");
       document.getElementById("guess-correct-text").innerText =
         "Congratulations!";
       wonVar = true;
@@ -89,7 +105,7 @@ function MakeGuess() {
     document.getElementById("guess-correct-text").hidden = false;
 
     if (guessCount >= maxGuesses) {
-      console.log("Out of guesses!");
+      // console.log("Out of guesses!");
       // console.log(wonVar);
       if (wonVar == false) {
         EndGame(false);
@@ -98,7 +114,7 @@ function MakeGuess() {
   } else {
     document.getElementById("guess-correct-text").innerText =
       "Select a Country!";
-    console.log("Element not found:", selectedButtonId);
+    // console.log("Element not found:", selectedButtonId);
   }
 }
 
@@ -112,10 +128,13 @@ function EndGame(won) {
   document.getElementById("guess-country-name").hidden = true;
   document.getElementById("confetti-emoji").hidden = false;
   document.getElementById("radio-url").hidden = false;
+  document.getElementById("radio-url").innerHTML =
+    `<p>RADIO URL: <a href=${RadioGardenURL} class="link">${RadioGardenURL}</a></p>`;
 
   if (!won) {
     document.getElementById("guess-correct-text").innerText = "Game Over! ❌";
     document.getElementById("confetti-emoji").hidden = true;
+    document.getElementById("radio-url").hidden = true;
   }
 }
 
@@ -129,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name,
         icon: info.icon,
       }));
+      setRadio(dateParam);
 
       // Find and separate the correct country
       const correctCountry = countries.find((c) => c.name === CorrectCountry);
@@ -169,7 +189,7 @@ function triggerConfetti(event) {
   const y = (rect.top + rect.height / 2) / window.innerHeight;
 
   confetti({
-    particleCount: 50,
+    particleCount: 100,
     spread: 100,
     origin: { x, y },
     colors: ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff"],
@@ -179,4 +199,15 @@ function triggerConfetti(event) {
   });
 }
 
-function stopAnimation() {}
+function setRadio(date) {
+  const targetDate = date;
+
+  const station = stationData.find((item) => item.date === targetDate);
+
+  // console.log(station.stationURL);
+  // console.log(station.country);
+  CorrectCountry = station.country;
+  RadioGardenURL = station.radioGarden;
+  StationURL = station.stationURL;
+  document.getElementById("audio-player").src = StationURL;
+}
