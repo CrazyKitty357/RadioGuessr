@@ -23,6 +23,74 @@
     "Russia": {
       "icon": "🇷🇺",
       "globe": "🌏"
+    },
+    "Trans Pride": {
+      "icon": "🏳️‍⚧️",
+      "globe": "🌐"
+    },
+    "Gay Pride": {
+      "icon": "🏳️‍🌈",
+      "globe": "🌐"
+    },
+    "Swashbuckler's Pride": {
+      "icon": "🏴‍☠️",
+      "globe": "🌐"
+    },
+    "Brazil": {
+      "icon": "🇧🇷",
+      "globe": "🌎"
+    },
+    "Nepal": {
+      "icon": "🇳🇵",
+      "globe": "🌏"
+    },
+    "Netherlands": {
+      "icon": "🇳🇱",
+      "globe": "🌍"
+    },
+    "South Korea": {
+      "icon": "🇰🇷",
+      "globe": "🌏"
+    },
+    "Wales": {
+      "icon": "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
+      "globe": "🌍"
+    },
+    "New Zealand": {
+      "icon": "🇳🇿",
+      "globe": "🌏"
+    },
+    "China": {
+      "icon": "🇨🇳",
+      "globe": "🌏"
+    },
+    "Italy": {
+      "icon": "🇮🇹",
+      "globe": "🌍"
+    },
+    "Antartica": {
+      "icon": "🇦🇶",
+      "globe": "🌐"
+    },
+    "Ireland": {
+      "icon": "🇮🇪",
+      "globe": "🌍"
+    },
+    "Spain": {
+      "icon": "🇪🇸",
+      "globe": "🌍"
+    },
+    "Denmark": {
+      "icon": "🇩🇰",
+      "globe": "🌍"
+    },
+    "Philippines": {
+      "icon": "🇵🇭",
+      "globe": "🌏"
+    },
+    "Egypt": {
+      "icon": "🇪🇬",
+      "globe": "🌍"
     }
   }
 ]
