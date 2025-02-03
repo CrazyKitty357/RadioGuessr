@@ -44,6 +44,18 @@ function StartGame() {
   document.getElementById("country-selector").hidden = false;
   document.getElementById("guess-country-name").hidden = false;
   document.getElementById("guess-correct-text").hidden = false;
+  // console.log(jsonData[CorrectCountry]?.globe);
+  document.body.style.setProperty(
+    "--globe-emoji",
+    `"${jsonData[CorrectCountry]?.globe}"`,
+  );
+  var link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  link.href = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>${jsonData[CorrectCountry]?.globe}</text></svg>`;
 }
 
 function MakeGuess() {
@@ -108,6 +120,7 @@ function EndGame(won) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  document.body.style.setProperty("--globe-emoji", `"🌎"`);
   fetch("countries.json")
     .then((response) => response.json())
     .then((data) => {
@@ -165,3 +178,5 @@ function triggerConfetti(event) {
     scalar: 1.2,
   });
 }
+
+function stopAnimation() {}

@@ -9,6 +9,20 @@
             href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🌎</text></svg>"
         />
         <link rel="stylesheet" type="text/css" href="../styles-tw.css" />
+        <style>
+            body::before {
+                content: var(--globe-emoji);
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 20em;
+                opacity: 0.2;
+                z-index: -1;
+                pointer-events: none;
+                animation: globeCycle 0s infinite;
+            }
+        </style>
     </head>
     <body>
         <div class="center">

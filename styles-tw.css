@@ -512,11 +512,17 @@
   }
 }
 @layer utilities {
+  .fixed {
+    position: fixed;
+  }
   .grid {
     display: grid;
   }
   .hidden {
     display: none;
+  }
+  .transform {
+    transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
   }
   .grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -544,6 +550,29 @@ body {
   color: white;
   background: rgb(8, 8, 62);
   background: linear-gradient( 0deg, rgba(5, 5, 46, 1) 0%, rgba(0, 0, 0, 1) 100% );
+}
+body::before {
+  content: "🌎";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20em;
+  opacity: 0.2;
+  z-index: -1;
+  pointer-events: none;
+  animation: globeCycle 2s infinite;
+}
+@keyframes globeCycle {
+  0%, 33.33% {
+    content: "🌏";
+  }
+  33.34%, 66.66% {
+    content: "🌍";
+  }
+  66.67%, 100% {
+    content: "🌎";
+  }
 }
 .link {
   color: var(--color-blue-700);
@@ -623,6 +652,31 @@ body {
     transform: none;
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: rotateX(0);
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: rotateY(0);
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: rotateZ(0);
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: skewX(0);
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: skewY(0);
 }
 @property --tw-font-weight {
   syntax: "*";

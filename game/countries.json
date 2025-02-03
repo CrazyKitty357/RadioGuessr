@@ -1,10 +1,28 @@
 [
   {
-    "Japan": { "icon": "🇯🇵" },
-    "United States": { "icon": "🇺🇸" },
-    "Canada": { "icon": "🇨🇦" },
-    "United Kingdom": { "icon": "🇬🇧" },
-    "Germany": { "icon": "🇩🇪" },
-    "Russia": { "icon": "🇷🇺" }
+    "Japan": {
+      "icon": "🇯🇵",
+      "globe": "🌏"
+    },
+    "United States": {
+      "icon": "🇺🇸",
+      "globe": "🌎"
+    },
+    "Canada": {
+      "icon": "🇨🇦",
+      "globe": "🌎"
+    },
+    "United Kingdom": {
+      "icon": "🇬🇧",
+      "globe": "🌍"
+    },
+    "Germany": {
+      "icon": "🇩🇪",
+      "globe": "🌍"
+    },
+    "Russia": {
+      "icon": "🇷🇺",
+      "globe": "🌏"
+    }
   }
 ]
