@@ -1,4 +1,4 @@
-const CorrectCountry = "Japan";
+const CorrectCountry = "Germany";
 let selectedButtonId = null;
 let jsonData = null;
 let guessCount = 0;
