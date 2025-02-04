@@ -91,6 +91,22 @@
     "Egypt": {
       "icon": "🇪🇬",
       "globe": "🌍"
+    },
+    "Ukraine": {
+      "icon": "🇺🇦",
+      "globe": "🌍"
+    },
+    "Vatican City": {
+      "icon": "🇻🇦",
+      "globe": "🌍"
+    },
+    "Mexico": {
+      "icon": "🇲🇽",
+      "globe": "🌎"
+    },
+    "Botswana": {
+      "icon": "🇧🇼",
+      "globe": "🌍"
     }
   }
 ]

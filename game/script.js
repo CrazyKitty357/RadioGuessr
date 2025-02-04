@@ -20,7 +20,9 @@ fetch("countries.json")
   })
   .catch((error) => console.error("Error loading JSON:", error));
 
-fetch("stations.json")
+fetch(
+  "https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json",
+)
   .then((response) => response.json())
   .then((data) => {
     stationData = data;
