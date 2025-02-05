@@ -32,7 +32,7 @@
       "icon": "🏳️‍🌈",
       "globe": "🌐"
     },
-    "Swashbuckler Pride": {
+    "Swashbuckler's Pride": {
       "icon": "🏴‍☠️",
       "globe": "🌐"
     },
@@ -111,6 +111,54 @@
     "Australia": {
       "icon": "🇦🇺",
       "globe": "🌏"
+    },
+    "India": {
+      "icon": "🇮🇳",
+      "globe": "🌏"
+    },
+    "France": {
+      "icon": "🇫🇷",
+      "globe": "🌍"
+    },
+    "Sweeden": {
+      "icon": "🇸🇪",
+      "globe": "🌍"
+    },
+    "Mongolia": {
+      "icon": "🇲🇳",
+      "globe": "🌏"
+    },
+    "Norway": {
+      "icon": "🇳🇴",
+      "globe": "🌍"
+    },
+    "Indonesia": {
+      "icon": "🇮🇩",
+      "globe": "🌏"
+    },
+    "Puerto Rico": {
+      "icon": "🇵🇷",
+      "globe": "🌎"
+    },
+    "Iceland": {
+      "icon": "🇮🇸",
+      "globe": "🌍"
+    },
+    "Bahamas": {
+      "icon": "🇧🇸",
+      "globe": "🌎"
+    },
+    "Singapore": {
+      "icon": "🇸🇬",
+      "globe": "🌏"
+    },
+    "Taiwan": {
+      "icon": "🇹🇼",
+      "globe": "🌏"
+    },
+    "Finland": {
+      "icon": "🇫🇮",
+      "globe": "🌍"
     }
   }
 ]
