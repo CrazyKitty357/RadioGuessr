@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         name,
         icon: info.icon,
       }));
-      setRadio(dateParam);
+      setRadio(dateParam); // Ensure dateParam is defined before this line
 
       // Find and separate the correct country
       const correctCountry = countries.find((c) => c.name === CorrectCountry);
@@ -173,7 +173,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => {
+      console.error("Error:", error);
+      if (
+        error instanceof ReferenceError &&
+        error.message.includes("stationData is not defined")
+      ) {
+        console.error("stationData is not defined. Refreshing the page...");
+        location.reload();
+      }
+    });
 });
 
 // Keep the same shuffleArray function
