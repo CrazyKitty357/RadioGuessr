@@ -68,7 +68,7 @@
       "icon": "🇮🇹",
       "globe": "🌍"
     },
-    "Antartica": {
+    "Antarctica": {
       "icon": "🇦🇶",
       "globe": "🌐"
     },
@@ -158,6 +158,22 @@
     },
     "Finland": {
       "icon": "🇫🇮",
+      "globe": "🌍"
+    },
+    "Peru": {
+      "icon": "🇵🇪",
+      "globe": "🌎"
+    },
+    "Argentina": {
+      "icon": "🇦🇷",
+      "globe": "🌎"
+    },
+    "Uganda": {
+      "icon": "🇺🇬",
+      "globe": "🌍"
+    },
+    "Kenya": {
+      "icon": "🇰🇪",
       "globe": "🌍"
     }
   }

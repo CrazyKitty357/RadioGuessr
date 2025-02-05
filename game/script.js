@@ -50,6 +50,13 @@ function ToggleButton(buttonId) {
   document.getElementById("guess-country-name").innerText = SelectedCountry;
 }
 
+window.onload = function () {
+  setTimeout(function () {
+    console.clear();
+    document.getElementById("play-btn").innerText = "PLAY GAME!";
+  }, 250);
+};
+
 function StartGame() {
   setRadio(dateParam);
   guessCount = 0;

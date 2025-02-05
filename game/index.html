@@ -32,15 +32,11 @@
                     id="play-btn"
                     onclick="StartGame()"
                 >
-                    PLAY GAME!
+                    LOADING...
                 </button>
                 <div>
-                    <audio
-                        id="audio-player"
-                        src="https://stream.gensokyoradio.net/3/"
-                        controls
-                        hidden
-                    ></audio>
+                    <!-- Let's try to not accidently DDOS gensokyo radio, I actually like them. -->
+                    <audio id="audio-player" src="" controls hidden></audio>
                 </div>
                 <div
                     id="country-selector"
