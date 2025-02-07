@@ -20,14 +20,16 @@ fetch("countries.json")
   })
   .catch((error) => console.error("Error loading JSON:", error));
 
-fetch(
-  "https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json",
-)
-  .then((response) => response.json())
-  .then((data) => {
-    stationData = data;
-  })
-  .catch((error) => console.error("Error loading JSON:", error));
+async function fetchStations() {
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/CrazyKitty357/RadioGuessr-db/refs/heads/main/stations.json",
+    );
+    stationData = await response.json();
+  } catch (error) {
+    console.error("Error loading JSON:", error);
+  }
+}
 
 function ToggleButton(buttonId) {
   if (selectedButtonId) {
@@ -51,10 +53,12 @@ function ToggleButton(buttonId) {
 }
 
 window.onload = function () {
-  setTimeout(function () {
-    console.clear();
-    document.getElementById("play-btn").innerText = "PLAY GAME!";
-  }, 250);
+  fetchStations();
+  document.getElementById("play-btn").innerText = "PLAY GAME!";
+  // setTimeout(function () {
+  // console.clear();
+  // document.getElementById("play-btn").innerText = "PLAY GAME!";
+  // }, 250);
 };
 
 function StartGame() {
@@ -186,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
         error instanceof ReferenceError &&
         error.message.includes("stationData is not defined")
       ) {
-        console.error("stationData is not defined. Refreshing the page...");
+        console.error("stationData is not defined. Refreshing the page..."); // LEGACY ERROR HANDLING, I'm keeping it in though (you never know when you need the bruteforce fix.)
         location.reload();
       }
     });
