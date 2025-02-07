@@ -151,49 +151,38 @@ function EndGame(won) {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   document.body.style.setProperty("--globe-emoji", `"🌎"`);
+
+  await fetchStations();
+
   fetch("countries.json")
     .then((response) => response.json())
     .then((data) => {
-      // Convert country data to array format
       const countries = Object.entries(data[0]).map(([name, info]) => ({
         name,
         icon: info.icon,
       }));
-      setRadio(dateParam); // Ensure dateParam is defined before this line
 
-      // Find and separate the correct country
+      setRadio(dateParam);
+
       const correctCountry = countries.find((c) => c.name === CorrectCountry);
       if (!correctCountry) {
         throw new Error("Correct country not found in the data");
       }
 
-      // Get other countries and shuffle them
-      const otherCountries = countries.filter((c) => c.name !== CorrectCountry);
-      const shuffledOthers = shuffleArray(otherCountries).slice(0, 5);
+      const otherCountries = shuffleArray(
+        countries.filter((c) => c.name !== CorrectCountry),
+      ).slice(0, 5);
 
-      // Combine and shuffle all selected countries
-      const finalSelection = shuffleArray([correctCountry, ...shuffledOthers]);
+      const finalSelection = shuffleArray([correctCountry, ...otherCountries]);
 
-      // Assign flags to buttons
-      for (let i = 1; i <= 6; i++) {
-        const button = document.getElementById(`country-${i}`);
-        if (button && finalSelection[i - 1]) {
-          button.textContent = finalSelection[i - 1].icon;
-        }
-      }
+      finalSelection.forEach((country, i) => {
+        const button = document.getElementById(`country-${i + 1}`);
+        if (button) button.textContent = country.icon;
+      });
     })
-    .catch((error) => {
-      console.error("Error:", error);
-      if (
-        error instanceof ReferenceError &&
-        error.message.includes("stationData is not defined")
-      ) {
-        console.error("stationData is not defined. Refreshing the page..."); // LEGACY ERROR HANDLING, I'm keeping it in though (you never know when you need the bruteforce fix.)
-        location.reload();
-      }
-    });
+    .catch((error) => console.error("Error:", error));
 });
 
 // Keep the same shuffleArray function
