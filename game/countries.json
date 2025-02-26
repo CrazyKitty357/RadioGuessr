@@ -196,9 +196,13 @@
       "icon": "🇹🇭",
       "globe": "🌏"
     },
-	"Colombia": {
+    "Colombia": {
       "icon": "🇨🇴",
       "globe": "🌎"
-	}
+    },
+    "South Africa": {
+      "icon": "🇿🇦",
+      "globe": "🌍"
+    }
   }
 ]
