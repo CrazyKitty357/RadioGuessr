@@ -31,6 +31,11 @@ async function fetchStations() {
   }
 }
 
+function isMobilePlatform() {
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  return /iPhone|iPad|iPod|Android/i.test(userAgent);
+}
+
 function ToggleButton(buttonId) {
   if (selectedButtonId) {
     document.getElementById(selectedButtonId).classList.remove("selected");
@@ -74,10 +79,11 @@ function StartGame() {
   document.getElementById("guess-country-name").hidden = false;
   document.getElementById("guess-correct-text").hidden = false;
   // console.log(jsonData[CorrectCountry]?.globe);
-  // document.body.style.setProperty(
-  // "--globe-emoji",
-  // `"${jsonData[CorrectCountry]?.globe}"`,
-  // );
+  if (isMobilePlatform() === true)
+    document.body.style.setProperty(
+      "--globe-emoji",
+      `"${jsonData[CorrectCountry]?.globe}"`,
+    );
   var link = document.querySelector("link[rel~='icon']");
   if (!link) {
     link = document.createElement("link");
