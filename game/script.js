@@ -79,11 +79,14 @@ function StartGame() {
   document.getElementById("guess-country-name").hidden = false;
   document.getElementById("guess-correct-text").hidden = false;
   // console.log(jsonData[CorrectCountry]?.globe);
+
+  // MOBILE HINT
   if (isMobilePlatform() === true)
     document.body.style.setProperty(
       "--globe-emoji",
       `"${jsonData[CorrectCountry]?.globe}"`,
     );
+
   var link = document.querySelector("link[rel~='icon']");
   if (!link) {
     link = document.createElement("link");
@@ -151,9 +154,12 @@ function EndGame(won) {
     `<p>RADIO URL: <a href=${RadioGardenURL} class="link">${RadioGardenURL}</a></p>`;
 
   if (!won) {
+    document.getElementById("guess-country-name").hidden = false;
+    document.getElementById("guess-country-name").innerText =
+      `The correct country was ${CorrectCountry}`;
     document.getElementById("guess-correct-text").innerText = "Game Over! ❌";
     document.getElementById("confetti-emoji").hidden = true;
-    document.getElementById("radio-url").hidden = true;
+    // document.getElementById("radio-url").hidden = true;
   }
 }
 
