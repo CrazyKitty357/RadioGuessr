@@ -203,6 +203,30 @@
     "South Africa": {
       "icon": "🇿🇦",
       "globe": "🌍"
+    },
+    "North Macedonia": {
+      "icon": "🇲🇰",
+      "globe": "🌍"
+    },
+    "Serbia": {
+      "icon": "🇷🇸",
+      "globe": "🌍"
+    },
+    "Kosovo": {
+      "icon": "🇽🇰",
+      "globe": "🌍"
+    },
+    "Montenegro": {
+      "icon": "🇲🇪",
+      "globe": "🌍"
+    },
+    "Greece": {
+      "icon": "🇬🇷",
+      "globe": "🌍"
+    },
+    "Albania": {
+      "icon": "🇦🇱",
+      "globe": "🌍"
     }
   }
 ]
