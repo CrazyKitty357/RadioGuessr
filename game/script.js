@@ -7,7 +7,7 @@ let stationData = null; // For stations data
 let guessCount = 0;
 const maxGuesses = 2;
 var SelectedCountry = null; // The country selected by the user's button click
-var wonVar = false;
+var wonVar = false; // Track if the user won the game
 
 const url = new URL(window.location.href);
 const dateParam = url.searchParams.get("date");
@@ -78,6 +78,7 @@ function StartGame() {
   setRadio(dateParam);
 
   guessCount = 0;
+  wonVar = false; // Reset wonVar at the start of the game
   console.log("no cheating :)");
   document.getElementById("play-btn").hidden = true;
   document.getElementById("guess-btn").hidden = false;
@@ -87,6 +88,7 @@ function StartGame() {
   document.getElementById("country-selector").hidden = false;
   document.getElementById("guess-country-name").hidden = false;
   document.getElementById("guess-correct-text").hidden = false;
+  document.getElementById("share-btn").hidden = true; // Hide share button at start
 
 
   // MOBILE HINT - Ensure jsonData[CorrectCountry] exists
@@ -103,9 +105,12 @@ function StartGame() {
       if (!link) {
         link = document.createElement("link");
         link.rel = "icon";
+        link.type = "image/svg+xml"; // Set type for SVG favicon
         document.head.appendChild(link);
       }
-      link.href = `data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>${jsonData[CorrectCountry]?.globe}</text></svg>`; // Added ?.
+      // Use encodeURIComponent for safety in data URL
+      const svgIcon = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='80'>${jsonData[CorrectCountry]?.globe || '🌎'}</text></svg>`;
+      link.href = `data:image/svg+xml,${encodeURIComponent(svgIcon)}`;
   }
 }
 
@@ -143,18 +148,20 @@ function MakeGuess() {
     if (guessedText === correctIcon) {
       document.getElementById("guess-correct-text").innerText =
         "Congratulations!";
-      wonVar = true;
+      wonVar = true; // Set wonVar to true
       EndGame(true);
     } else {
       document.getElementById("guess-correct-text").innerText =
         `Incorrect ❌ (${maxGuesses - guessCount} guess${maxGuesses - guessCount === 1 ? '' : 'es'} remaining)`; // Added pluralization
+
+      if (guessCount >= maxGuesses) { // Only end if not won and out of guesses
+          wonVar = false; // Ensure wonVar is false on final incorrect guess
+          EndGame(false);
+      }
     }
 
     document.getElementById("guess-correct-text").hidden = false;
 
-    if (guessCount >= maxGuesses && !wonVar) { // Only end if not won and out of guesses
-        EndGame(false);
-    }
   } else {
      // This case should ideally not happen if selectedButtonId is set, but good safety
     document.getElementById("guess-correct-text").innerText =
@@ -169,28 +176,101 @@ function EndGame(won) {
   // document.getElementById("audio-player").pause(); // Consider if you want to pause
   // document.getElementById("audio-player").hidden = true; // Consider if you want to hide
   document.getElementById("country-selector").hidden = true;
-  document.getElementById("guess-country-name").hidden = true;
+  // document.getElementById("guess-country-name").hidden = true; // Keep visible to show correct answer
   document.getElementById("confetti-emoji").hidden = false;
   document.getElementById("radio-url").hidden = false;
+  document.getElementById("share-btn").hidden = false; // Show share button at end
+
   // Ensure RadioGardenURL is valid before setting href
   document.getElementById("radio-url").innerHTML =
     `<p>RADIO URL: <a href="${RadioGardenURL || '#'}" class="link">${RadioGardenURL || 'URL not available'}</a></p>`;
 
 
-  if (!won) {
+  if (won) {
+     document.getElementById("guess-correct-text").innerText = "Game Over! ✅"; // Indicate win clearly
+     // Correct answer is implicitly known
+  } else {
     document.getElementById("guess-country-name").hidden = false;
     document.getElementById("guess-country-name").innerText =
       `The correct country was ${CorrectCountry}`; // CorrectCountry should be set by setRadio
-    document.getElementById("guess-correct-text").innerText = "Game Over! ❌";
+    document.getElementById("guess-correct-text").innerText = "Game Over! ❌"; // Indicate loss clearly
     document.getElementById("confetti-emoji").hidden = true;
   }
 }
+
+async function shareScore() {
+    if (!jsonData || !CorrectCountry || !dateParam) {
+        console.error("Cannot share score: Data not available.");
+        // Optionally inform the user
+        document.getElementById("guess-correct-text").innerText = "Error preparing share data.";
+        return;
+    }
+
+    // Determine the result symbols based on wonVar AND guessCount
+    let resultSymbols = '';
+    if (wonVar && guessCount === 1) {
+        resultSymbols = '✅'; // Won on the first guess
+    } else if (wonVar && guessCount === 2) {
+        resultSymbols = '❎✅'; // Won on the second guess (first was incorrect, second correct)
+    } else if (!wonVar && guessCount === 2) {
+        resultSymbols = '❎❎'; // Lost after two guesses (both incorrect)
+    } else {
+         // This case shouldn't ideally happen with maxGuesses = 2, but good to handle
+         console.warn("Unexpected state for share score generation:", { wonVar, guessCount });
+         resultSymbols = '❓❓'; // Indicate an unknown result state
+    }
+
+    // Get the globe emoji for the correct country
+    const globeEmoji = jsonData[CorrectCountry]?.globe || '🌎'; // Default to world emoji if not found
+
+    // Construct the clipboard text
+    const shareText = `RadioGuessr ${globeEmoji}: ${dateParam}\n${resultSymbols}\nhttps://crazykitty357.github.io/RadioGuessr/`; // Added site URL
+
+    try {
+        // Use the modern Clipboard API
+        await navigator.clipboard.writeText(shareText);
+        console.log("Score copied to clipboard:", shareText);
+
+        // Provide user feedback
+        const shareButton = document.getElementById("share-btn");
+        const originalText = shareButton.innerText; // Get original text from button
+        shareButton.innerText = "Copied!";
+        // Optional: Revert text after a short delay
+        setTimeout(() => {
+             // Check if the text hasn't been changed by something else since
+             if (shareButton.innerText === "Copied!") {
+                 shareButton.innerText = originalText;
+             }
+        }, 2000); // Revert after 2 seconds
+
+    } catch (err) {
+        console.error("Failed to copy score to clipboard:", err);
+        // Inform the user if copy failed
+        const shareButton = document.getElementById("share-btn");
+        shareButton.innerText = "Copy Failed!";
+         setTimeout(() => {
+             if (shareButton.innerText === "Copy Failed!") {
+                 shareButton.innerText = "Share Score"; // Revert to default share text
+             }
+        }, 3000); // Revert after 3 seconds
+    }
+}
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Set initial globe emoji (can be done directly in CSS)
   document.body.style.setProperty("--globe-emoji", `"🌎"`);
   document.getElementById("play-btn").innerText = "Loading...";
   document.getElementById("play-btn").disabled = true;
+
+  // Add event listener for the share button
+  // Ensure the button exists in your HTML (e.g., <button id="share-btn" hidden>Share Score</button>)
+  const shareButton = document.getElementById("share-btn");
+  if (shareButton) {
+      shareButton.addEventListener("click", shareScore);
+  } else {
+      console.error("Share button with id 'share-btn' not found!");
+  }
 
 
   await fetchStations(); // Wait for stations data
@@ -212,42 +292,67 @@ document.addEventListener("DOMContentLoaded", async () => {
       jsonData = data[0]; // Store the data globally
 
       // Set the initial radio based on dateParam AFTER stationData is loaded
-      setRadio(dateParam);
+      setRadio(dateParam); // This sets CorrectCountry
 
-      // Now use the CorrectCountry determined by setRadio
+      // Now use the CorrectCountry determined by setRadio to build the buttons
+      // Need a default CorrectCountry if setRadio failed or dateParam was bad
+      const targetCountry = CorrectCountry || Object.keys(jsonData)[0]; // Use first country as fallback if CorrectCountry is null/undefined
+
       const countries = Object.entries(jsonData).map(([name, info]) => ({
         name,
         icon: info.icon,
+        globe: info.globe
       }));
 
-      const correctCountry = countries.find((c) => c.name === CorrectCountry);
-      if (!correctCountry) {
-         // This can happen if CorrectCountry set by setRadio isn't in countries.json
-        console.error(`Correct country "${CorrectCountry}" from stations.json not found in countries.json`);
-        document.getElementById("play-btn").innerText = `Error: Country data mismatch for "${CorrectCountry}"`;
-        document.getElementById("play-btn").disabled = true;
-        return; // Stop initialization
+      const correctCountry = countries.find((c) => c.name === targetCountry);
+
+      // If targetCountry isn't found in countries.json, something is wrong.
+      // Or if setRadio failed AND countries.json was empty/malformed.
+      if (!correctCountry && targetCountry) {
+         console.error(`Target country "${targetCountry}" not found in countries.json`);
+         document.getElementById("play-btn").innerText = `Error: Data mismatch for "${targetCountry}"`;
+         document.getElementById("play-btn").disabled = true;
+         return; // Stop initialization
+      } else if (!correctCountry && !targetCountry) {
+           console.error("Could not determine target country and countries.json seems empty or malformed.");
+           document.getElementById("play-btn").innerText = "Error loading country data.";
+           document.getElementById("play-btn").disabled = true;
+           return; // Stop initialization
       }
 
+
       const otherCountries = shuffleArray(
-        countries.filter((c) => c.name !== CorrectCountry),
+        countries.filter((c) => c.name !== targetCountry),
       ).slice(0, 5); // Get 5 others
 
-      const finalSelection = shuffleArray([correctCountry, ...otherCountries]);
+      // Handle the case where there aren't enough other countries (e.g. less than 6 countries total)
+      const finalSelection = shuffleArray([correctCountry, ...otherCountries].filter(c => c != null)); // Filter out potential null if correctCountry wasn't found but loop continued
+
 
       // Populate country selector buttons
-      finalSelection.forEach((country, i) => {
-        const button = document.getElementById(`country-${i + 1}`);
-        if (button) {
-            button.textContent = country.icon;
-            // You might want to store the country name or a reference on the button element
-            // button.dataset.countryName = country.name;
-        }
-      });
+      // Only populate up to 6 buttons total
+      for (let i = 0; i < 6; i++) {
+          const button = document.getElementById(`country-${i + 1}`);
+          if (button) {
+              if (finalSelection[i]) {
+                 button.textContent = finalSelection[i].icon;
+                 // You might want to store the country name or a reference on the button element
+                 // button.dataset.countryName = country.name;
+              } else {
+                 // Hide or disable unused buttons if there are fewer than 6 options
+                 button.style.display = 'none'; // Or button.disabled = true;
+              }
+          }
+      }
 
-      // Data loaded and setup complete, enable play button
-      document.getElementById("play-btn").innerText = "PLAY GAME!";
-      document.getElementById("play-btn").disabled = false;
+
+      // Data loaded and setup complete, enable play button ONLY if setRadio didn't report an error
+      // setRadio sets the play-btn text/disabled state on error
+      if (document.getElementById("play-btn").disabled !== true || document.getElementById("play-btn").innerText === "Loading...") {
+           document.getElementById("play-btn").innerText = "PLAY GAME!";
+           document.getElementById("play-btn").disabled = false;
+      }
+
 
     })
     .catch((error) => {
@@ -296,7 +401,7 @@ function setRadio(date) {
   // Ensure stationData is available
   if (!stationData) {
       console.error("stationData is not loaded when setRadio is called.");
-      // Cannot proceed without station data
+      // Cannot proceed without station data, error already reported by fetchStations
       return;
   }
 
@@ -312,6 +417,12 @@ function setRadio(date) {
       document.getElementById("country-selector").hidden = true;
       document.getElementById("guess-country-name").hidden = true;
       document.getElementById("guess-correct-text").hidden = true;
+      document.getElementById("radio-url").hidden = true; // Hide URL too
+      document.getElementById("confetti-emoji").hidden = true; // Hide confetti
+      document.getElementById("share-btn").hidden = true; // Hide share button
+
+      // Set page title to reflect error
+      document.title = "RadioGuessr - No Data";
       return; // Stop here
   }
 
@@ -320,5 +431,10 @@ function setRadio(date) {
   CorrectCountry = station.country;
   RadioGardenURL = station.radioGarden;
   StationURL = station.stationURL;
-  document.getElementById("audio-player").src = StationURL; // Set the audio source
+
+  // Set the audio source *only if* a station was found
+  document.getElementById("audio-player").src = StationURL;
+
+  // Set page title based on the date
+  document.title = `RadioGuessr - ${targetDate}`;
 }
