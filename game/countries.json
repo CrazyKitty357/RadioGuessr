@@ -227,6 +227,18 @@
     "Albania": {
       "icon": "🇦🇱",
       "globe": "🌍"
+    },
+    "Belgium": {
+      "icon": "🇧🇪",
+      "globe": "🌍"
+    },
+    "Romania": {
+      "icon": "🇷🇴",
+      "globe": "🌍"
+    },
+    "Monaco": {
+      "icon": "🇲🇨",
+      "globe": "🌍"
     }
   }
 ]
