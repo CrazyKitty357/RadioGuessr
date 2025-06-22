@@ -24,7 +24,7 @@
       "icon": "🇷🇺",
       "globe": "🌏"
     },
-    "Trans Pride": {
+    "Transgender Pride": {
       "icon": "🏳️‍⚧️",
       "globe": "🌐"
     },
@@ -250,6 +250,14 @@
     },
 	"Portugal": {
 	  "icon": "🇵🇹",
+	  "globe": "🌍"
+	},
+	"Dominican Republic": {
+	  "icon": "🇩🇴",
+	  "globe": "🌎"
+	},
+	"Cyprus": {
+	  "icon": "🇨🇾",
 	  "globe": "🌍"
 	}
   }
